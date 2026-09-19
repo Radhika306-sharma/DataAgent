@@ -25,45 +25,105 @@ DataAgent automates this workflow by:
 The architecture is designed to support multiple data sources and can be extended as new collectors and processing modules are added.
 
 ---
-
+```text
 ## Architecture
 
-```text
+
+DataAgent follows a modular pipeline architecture:
+
                     ┌─────────────────────┐
                     │     Data Sources     │
                     └──────────┬──────────┘
                                │
-              ┌────────────────┼────────────────┐
-              │                │                │
-              ▼                ▼                ▼
-        Hugging Face        Kaggle           GitHub
-          Collector         Collector        Collector
-              │
-              ▼
-      ┌──────────────────┐
-      │ Dataset Metadata  │
-      │    Extraction     │
-      └────────┬─────────┘
-               │
-               ▼
-      ┌──────────────────┐
-      │ Dataset Scoring   │
-      └────────┬─────────┘
-               │
-               ▼
-      ┌──────────────────┐
-      │ Priority Engine   │
-      └────────┬─────────┘
-               │
-               ▼
-      ┌──────────────────┐
-      │ Deduplication     │
-      └────────┬─────────┘
-               │
-               ▼
-      ┌──────────────────┐
-      │ Dataset Pipeline  │
-      └────────┬─────────┘
-               │
-               ▼
-       Reports / Catalogue
+                               ▼
+                    ┌─────────────────────┐
+                    │     Collectors      │
+                    │                     │
+                    │   Hugging Face      │
+                    │   (Currently)       │
+                    │                     │
+                    │   Kaggle            │
+                    │   GitHub            │
+                    │   AI4Bharat         │
+                    │   (Planned)         │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Metadata Extraction │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Dataset Scoring   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Priority Engine   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Deduplication     │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Processed Dataset   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                       Dataset Catalogue
+```
+---
+
+## Current Implementation
+
+The current version includes:
+
+- Hugging Face dataset collection
+- Dataset metadata extraction
+- Dataset relevance scoring
+- Dataset prioritization
+- Dataset deduplication
+- Configurable search keywords
+- Configurable pipeline settings
+- Structured dataset storage
+
+Additional collectors and reporting modules are planned for future development.
+
+---
+
+## Project Structure
+
+```text
+DataAgent/
+│
+├── analyzer/
+│   ├── metadata_extractor.py
+│   ├── priority_engine.py
+│   └── dataset_scorer.py
+│
+├── collector/
+│   └── huggingface_collector.py
+│
+├── config/
+│   ├── search_keywords.py
+│   └── settings.py
+│
+├── processor/
+│   └── deduplicator.py
+│
+├── datasets/
+│   ├── raw/
+│   ├── processed/
+│   └── final/
+│
+├── logs/
+├── cache/
+│
+├── collect.py
+├── requirements.txt
+├── README.md
+└── .gitignore
